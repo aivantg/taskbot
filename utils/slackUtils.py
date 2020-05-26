@@ -19,9 +19,9 @@ BOT_ID = client.auth_test()['user_id']
 with open('utils/settings.json') as f:
   settings = json.load(f)
 
-data = r.get("https://slack.com/api/conversations.list?token=" + SLACK_TOKEN).json()
+data = r.get("https://slack.com/api/conversations.list?types=private_channel&token=" + SLACK_TOKEN).json()
 watched_channels = {c['id']: c['name'] for c in data['channels'] if settings['channelRules'].get(c['name'])}
-  
+
 # Utility Functions
 def send_message(channel, message, thread_ts=None):
     try: 
@@ -93,11 +93,12 @@ def process_link_message(text):
 # Event Handlers
 
 def process_message(text, channel, ts, user, thread_ts, channel_settings):
-    if thread_ts:
+   print(f"Processing message: '{text}' by {user}") 
+   if thread_ts:
         message = find_tracked_message(thread_ts, channel)
         if message:
             add_comment_to_notion_row(message.notion_row_id, message.slack_discussion_node, text, get_username(user))
-    else:
+   else:
         if channel_settings['mode'] == 'manual': # Only process messages from reacts
             return
         trigger = channel_settings['messageTrigger']

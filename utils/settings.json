@@ -1,26 +1,8 @@
 {
   "channelRules": {
-    "ideas": {
+    "eteam-secret-testing": {
+      "notionBaseUrl": "https://www.notion.so/calblueprint/b2b9259d183b40728f0320d1f2650a2f?v=7328da4fadc74800b907b78291f0ddc4",
       "messageTrigger": "all",
-      "mode": "auto",
-      "notionBaseUrl": "https://www.notion.so/...",
-      "reactions": {
-        "ack": "bulb",
-        "normalPriority": "heavy_plus_sign",
-        "highPriority": "exclamation",
-        "veryHighPriority": "bangbang",
-        "saveMessage": "inbox_tray",
-        "unsaveMessage": "outbox_tray"
-      },
-      "fieldNames": {
-        "title": "Idea",
-        "priority": "Importance",
-        "user": "Contact"
-      }
-    },
-    "references": {
-      "notionBaseUrl": "https://www.notion.so/...",
-      "messageTrigger": "link",
       "mode": "auto",
       "reactions": {
         "ack": "floppy_disk",
@@ -31,9 +13,9 @@
         "unsaveMessage": "outbox_tray"
       },
       "fieldNames": {
-        "title": "Title",
+        "title": "Name",
         "priority": "Importance",
-        "user": "Sourcer",
+        "user": "Assign",
         "link": "Link"
       }
     }
