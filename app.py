@@ -6,7 +6,7 @@ from pprint import pprint
 from playhouse.shortcuts import model_to_dict
 import os
 # from utils.slackUtils import receive_message, receive_reaction
-from utils.db import setup_db, update_db_with_tasks
+from utils.db import setup_db, update_db_with_tasks, Task
 setup_db()
 
 load_dotenv()
@@ -23,7 +23,8 @@ def refreshEvents():
 tasks = get_all_items("https://www.notion.so/calblueprint/b2b9259d183b40728f0320d1f2650a2f?v=7328da4fadc74800b907b78291f0ddc4")
 db_tasks = update_db_with_tasks(tasks)
 print(f"Found {len(tasks)} in Notion DB. Created {len(db_tasks)} new tasks in DB")
-pprint([t.to_dict() for t in db_tasks])
+# pprint([t.to_dict() for t in db_tasks])
+# pprint([t.to_dict() for t in Task.select()])
     
 
 

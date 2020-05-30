@@ -2,6 +2,7 @@ from peewee import *
 import datetime
 import os
 import urllib.parse as urlparse
+from pprint import pprint
 
 if 'DATABASE_URL' in os.environ:
     import psycopg2
@@ -37,6 +38,12 @@ class UserTask(BaseModel):
     user = ForeignKeyField(User, backref='tasks')
     task = ForeignKeyField(Task, backref='assignees')
 
+    class Meta:
+        indexes = (
+            # Specify a unique multi-column index on from/to-user.
+            (('user', 'task'), True),
+        )
+
 
 def setup_db():
     db.connect()
@@ -48,14 +55,19 @@ def update_db_with_tasks(tasks):
     new_tasks = []
 
     for task in tasks:
-        t, created = Task.get_or_create(row_id=task["id"], name=task['name'], status=task['status'], completion_date=task['completion_date'])
-        
+        t, created = Task.get_or_create(row_id=task["id"])
+        print(t.id)
+        q = Task.update(name=task['name'], status=task['status'], completion_date=task['completion_date']).where(Task.id == t.id)
+        q.execute()
         for assignee in task['assignees']:
             if assignee not in users:
                 users[assignee], _ = User.get_or_create(name=assignee)
             user = users[assignee]
-            UserTask.create(user=user, task=t)
-
+            try: 
+                UserTask.create(user=user, task=t)
+            except:
+                ## If user task already exists, it's fine. 
+                pass
         if created:
             new_tasks.append(t)
     return new_tasks
