@@ -54,6 +54,8 @@ def update_db_with_tasks(tasks):
     users = {}
     new_tasks = []
 
+
+    # TODO: categorize each task into "newly completed" "new idea", etc
     for task in tasks:
         t, created = Task.get_or_create(row_id=task["id"])
         print(t.id)
@@ -66,7 +68,7 @@ def update_db_with_tasks(tasks):
             try: 
                 UserTask.create(user=user, task=t)
             except:
-                ## If user task already exists, it's fine. 
+                # If user task already exists, ignore
                 pass
         if created:
             new_tasks.append(t)

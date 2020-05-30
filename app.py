@@ -24,7 +24,7 @@ tasks = get_all_items("https://www.notion.so/calblueprint/b2b9259d183b40728f0320
 db_tasks = update_db_with_tasks(tasks)
 print(f"Found {len(tasks)} in Notion DB. Created {len(db_tasks)} new tasks in DB")
 # pprint([t.to_dict() for t in db_tasks])
-# pprint([t.to_dict() for t in Task.select()])
+pprint([t.to_dict() for t in Task.select()])
     
 
 
