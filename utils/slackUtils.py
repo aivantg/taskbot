@@ -22,36 +22,6 @@ with open('utils/settings.json') as f:
 data = r.get("https://slack.com/api/conversations.list?types=private_channel&token=" + SLACK_TOKEN).json()
 watched_channels = {c['id']: c['name'] for c in data['channels'] if settings['channelRules'].get(c['name'])}
 
-# Utility Functions
-def send_message(channel, message, thread_ts=None):
-    try: 
-        return client.chat_postMessage(channel=channel, text=message, thread_ts=thread_ts, unfurl_media="False")['ts']
-    except:
-        print("Could not send message")
-
-def remove_message(channel, ts):
-    try:
-        client.chat_delete(channel=channel, ts=ts)
-    except:
-        print("Could not remove message")
-
-def react_message(channel, ts, reaction):
-    try: 
-        client.reactions_add(channel=channel, timestamp=ts, name=reaction)
-    except:
-        print("Could not add Reaction")
-
-def unreact_message(channel, ts, reaction):
-    try: 
-        client.reactions_remove(channel=channel, timestamp=ts, name=reaction)
-    except:
-        print("Could not remove Reaction")
-
-def get_username(userId):
-    return client.users_info(user=userId)['user']['profile']['real_name']
-
-def get_slack_message(channel, ts):
-    return client.conversations_history(latest=ts, channel=channel, limit=1, inclusive="True")['messages'][0]
 
 def save_message_to_notion(ts, channel, text, user, priority, link, channel_settings):
     # Create Row in Notion Database
@@ -136,21 +106,3 @@ def process_reaction(reaction, channel, ts, user, channel_settings):
                 save_message_to_notion(ts, channel, text, get_username(user), 'Normal', None, channel_settings)
 
 
-def receive_message(event):
-    if not event.get('text'): # Edge case
-        return 
-    text, channel, ts, user, thread_ts = event['text'], event['channel'], event['ts'], event['user'], event.get('thread_ts')
-    channel_name = watched_channels.get(channel)
-    if user and user != BOT_ID and channel_name:
-        channel_settings = settings['channelRules'][channel_name]
-        process_message(text, channel, ts, user, thread_ts, channel_settings)
-        
-
-
-def receive_reaction(event):
-    reaction, channel, user, ts = event['reaction'], event['item']['channel'], event['user'], event['item']['ts']
-    channel_name = watched_channels.get(channel)
-    if user and user != BOT_ID and channel_name:
-        channel_settings = settings['channelRules'][channel_name]
-        process_reaction(reaction, channel, ts, user, channel_settings)
-        

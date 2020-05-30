@@ -10,6 +10,19 @@ NOTION_TOKEN = os.getenv("NOTION_AUTH_TOKEN")
 # Setup Notion Client
 client = NotionClient(NOTION_TOKEN)
 
+def get_all_items(databaseUrl):
+    db = client.get_collection_view(databaseUrl)
+    items = []
+    for row in db.collection.get_rows():
+        items.append({
+            "id": row.id,
+            "name": row.name,
+            "status": row.status,
+            "completion_date": row.completion_date and row.completion_date.start,
+            "assignees": [person.full_name for person in row.assign]
+        })
+    return items
+
 def create_notion_row(databaseUrl, properties):
     db = client.get_collection_view(databaseUrl)
     row = db.collection.add_row()

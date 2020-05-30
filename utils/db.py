@@ -15,25 +15,51 @@ class BaseModel(Model):
     class Meta:
         database = db
 
-class TrackedMessage(BaseModel):
-    ts = CharField(unique=True)
-    channel = CharField()
-    notion_row_id = CharField()
-    notion_link_ts = CharField()
-    slack_discussion_node = CharField()
+class User(BaseModel):
+    name = CharField(unique=True)
+
+class Task(BaseModel):
+    row_id = CharField(unique=True)
+    name = CharField(null=True)
+    status = CharField(null=True)
+    completion_date = DateField(null=True)
+
+    def to_dict(self):
+        return {
+            'name': self.name,
+            'row_id': self.row_id,
+            'status': self.status,
+            'completion_date': self.completion_date,
+            'assignees': [assignee.user.name for assignee in self.assignees]
+        }
+
+class UserTask(BaseModel):
+    user = ForeignKeyField(User, backref='tasks')
+    task = ForeignKeyField(Task, backref='assignees')
+
 
 def setup_db():
     db.connect()
-    db.create_tables([TrackedMessage])
+    db.create_tables([User, Task, UserTask])
 
-def track_message(ts, channel, row_id, notion_link_ts, discussion_id):
-    return TrackedMessage.create(ts=ts, channel=channel, notion_row_id=row_id, notion_link_ts=notion_link_ts, slack_discussion_node=discussion_id)
+    
+def update_db_with_tasks(tasks):
+    users = {}
+    new_tasks = []
 
-def find_tracked_message(ts, channel):
-    try: 
-        return TrackedMessage.get(TrackedMessage.ts == ts, TrackedMessage.channel == channel)
-    except:
-        print("Could not find message.")
+    for task in tasks:
+        t, created = Task.get_or_create(row_id=task["id"], name=task['name'], status=task['status'], completion_date=task['completion_date'])
+        
+        for assignee in task['assignees']:
+            if assignee not in users:
+                users[assignee], _ = User.get_or_create(name=assignee)
+            user = users[assignee]
+            UserTask.create(user=user, task=t)
 
-def untrack_message(ts, channel):
-    return find_tracked_message(ts, channel).delete_instance()
+        if created:
+            new_tasks.append(t)
+    return new_tasks
+
+
+                    
+    
