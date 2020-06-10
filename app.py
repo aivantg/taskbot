@@ -48,6 +48,7 @@ def create_task():
         'status': 'Idea' if values['is_idea']['action']['selected_option']['value'] == 'yes' else 'Not Started'
         }
     if task['name'] == latest_task:
+        print("Duplicate Task Found")
         return '', 200
     latest_task = task['name']
 
