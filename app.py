@@ -10,6 +10,7 @@ from utils.db import setup_db, update_db_with_tasks, get_all_tasks_categorized
 setup_db()
 port = os.getenv("PORT") or 3000
 main_db_url = "https://www.notion.so/calblueprint/b2b9259d183b40728f0320d1f2650a2f?v=7328da4fadc74800b907b78291f0ddc4"
+latest_task = ''
 
 # cache db of all users so that we don't have to re-fetch each time
 all_users = get_users_for_full_names(main_db_url, ['Aivant Goyal', 'Alison Dowski', 'Annie Wang', 'Ace Chen', 'Myles Domingo', 'Micah Yong', 'Karina Nguyen'])
@@ -35,6 +36,7 @@ def new_task():
 
 @app.route('/create_task', methods=['POST'])
 def create_task():
+    global latest_task
     data = json.loads(request.form['payload'])
     values = data['view']['state']['values']
 
@@ -45,6 +47,10 @@ def create_task():
         'completion_date': datetime.strptime(values['completion_date']['action']['selected_date'], '%Y-%m-%d'),
         'status': 'Idea' if values['is_idea']['action']['selected_option']['value'] == 'yes' else 'Not Started'
         }
+    if task['name'] == latest_task:
+        return '', 200
+    latest_task = task['name']
+
     notion_url = create_notion_row(main_db_url, task)
 
     # Respond on Slack
