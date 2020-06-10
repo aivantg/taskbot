@@ -5,13 +5,13 @@ import urllib.parse as urlparse
 from utils.slack import get_slack_tag_for_name
 from pprint import pprint
 
-if 'DATABASE_URL' in os.environ:
-    import psycopg2
-    urlparse.uses_netloc.append('postgres')
-    url = urlparse.urlparse(os.environ["DATABASE_URL"])
-    db = PostgresqlDatabase(database=url.path[1:], user=url.username, password=url.password, host=url.hostname, port=url.port)
-else:
-    db = SqliteDatabase('bot.db')
+# if 'DATABASE_URL' in os.environ:
+#     import psycopg2
+#     urlparse.uses_netloc.append('postgres')
+#     url = urlparse.urlparse(os.environ["DATABASE_URL"])
+#     db = PostgresqlDatabase(database=url.path[1:], user=url.username, password=url.password, host=url.hostname, port=url.port)
+# else:
+db = SqliteDatabase('bot.db')
 
 class BaseModel(Model):
     class Meta:
