@@ -1,0 +1,154 @@
+{
+  "title": {
+    "type": "plain_text",
+    "text": "Create a New Task"
+  },
+  "submit": {
+    "type": "plain_text",
+    "text": "Create!"
+  },
+  "blocks": [
+    {
+      "block_id": "name",
+      "type": "input",
+      "element": {
+        "action_id": "action",
+
+        "type": "plain_text_input",
+        "action_id": "title_input",
+        "placeholder": {
+          "type": "plain_text",
+          "text": "Plan Next GM!"
+        }
+      },
+      "label": {
+        "type": "plain_text",
+        "text": "Task Name"
+      }
+    },
+    {
+      "block_id": "completion_date",
+      "type": "input",
+      "element": {
+        "action_id": "action",
+        "type": "datepicker",
+        "placeholder": {
+          "type": "plain_text",
+          "text": "Select a date",
+          "emoji": true
+        }
+      },
+      "label": {
+        "type": "plain_text",
+        "text": "Due Date",
+        "emoji": true
+      }
+    },
+    {
+      "block_id": "assignees",
+      "type": "input",
+      "element": {
+        "action_id": "action",
+        "type": "multi_static_select",
+        "placeholder": {
+          "type": "plain_text",
+          "text": "Choose people to assign",
+          "emoji": true
+        },
+        "options": [
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Aivant Goyal",
+              "emoji": true
+            },
+            "value": "Aivant Goyal"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Alison Dowski",
+              "emoji": true
+            },
+            "value": "Alison Dowski"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Annie Wang",
+              "emoji": true
+            },
+            "value": "Annie Wang"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Ace Chen",
+              "emoji": true
+            },
+            "value": "Ace Chen"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Myles Domingo",
+              "emoji": true
+            },
+            "value": "Myles Domingo"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Micah Yong",
+              "emoji": true
+            },
+            "value": "Micah Yong"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Karina Nguyen",
+              "emoji": true
+            },
+            "value": "Karina Ngyuen"
+          }
+        ]
+      },
+      "label": {
+        "type": "plain_text",
+        "text": "Assignees",
+        "emoji": true
+      }
+    },
+    {
+      "block_id": "is_idea",
+      "type": "input",
+      "element": {
+        "action_id": "action",
+        "type": "radio_buttons",
+        "options": [
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Yes"
+            },
+            "value": "yes"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "No"
+            },
+            "value": "no"
+          }
+        ]
+      },
+      "label": {
+        "type": "plain_text",
+        "text": "Is this an Idea? :bulb:",
+        "emoji": true
+      }
+    }
+  ],
+  "type": "modal"
+}

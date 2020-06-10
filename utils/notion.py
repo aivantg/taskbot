@@ -1,6 +1,7 @@
 from notion.client import NotionClient
 from notion.block import ToggleBlock, BulletedListBlock
 from dotenv import load_dotenv
+from pprint import pprint
 import os
 
 # Setup Environment Variables
@@ -9,6 +10,22 @@ NOTION_TOKEN = os.getenv("NOTION_AUTH_TOKEN")
 
 # Setup Notion Client
 client = NotionClient(NOTION_TOKEN)
+
+# Translates Notion Full Names to Users
+# Assumes atleast 1 item exists 
+def get_users_for_full_names(databaseUrl, full_names):
+    names = set(full_names)
+    users = {}
+    db = client.get_collection_view(databaseUrl)
+    for row in db.collection.get_rows():
+        assigned = row.assign
+        for person in row.assign:
+            if person.full_name in names:
+                users[person.full_name] = person
+                names.remove(person.full_name)
+        if len(names) == 0:
+            break
+    return users
 
 def get_all_items(databaseUrl):
     db = client.get_collection_view(databaseUrl)
@@ -28,8 +45,7 @@ def create_notion_row(databaseUrl, properties):
     row = db.collection.add_row()
     for key, value in properties.items():
         setattr(row, key, value)
-    slack_discussion = row.children.add_new(ToggleBlock, title="**Slack Discussion**")
-    return row.id, slack_discussion.id, row.get_browseable_url()
+    return row.get_browseable_url()
 
 def delete_notion_row(rowId):
     client.get_block(rowId).remove()

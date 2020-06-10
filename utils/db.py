@@ -2,6 +2,7 @@ from peewee import *
 from datetime import datetime, date
 import os
 import urllib.parse as urlparse
+from utils.slack import get_slack_tag_for_name
 from pprint import pprint
 
 if 'DATABASE_URL' in os.environ:
@@ -38,7 +39,7 @@ class Task(BaseModel):
             'freshly_created': self.freshly_created,
             'freshly_completed': self.freshly_completed,
             'new_idea': self.new_idea,
-            'assignees': [assignee.user.name for assignee in self.assignees]
+            'assignees': [get_slack_tag_for_name(assignee.user.name) for assignee in self.assignees]
         }
 
 class UserTask(BaseModel):
@@ -62,7 +63,7 @@ def get_all_tasks_categorized():
     categories = {}
     categories['freshly_completed'] = [task for task in all_tasks if task['freshly_completed']]
     categories['freshly_created'] = [task for task in all_tasks if task['freshly_created']]
-    categories['no_completion_date'] = [task for task in all_tasks if task['status'] != 'Ideas' and task['completion_date'] == None]
+    categories['no_completion_date'] = [task for task in all_tasks if task['status'] != 'Idea' and task['completion_date'] == None]
     categories['new_idea'] = [task for task in all_tasks if task['new_idea']]
     categories['late'] = [task for task in all_tasks if task['days_left'] != None and task['days_left'] < -1 and task['status'] != 'Completed']
     categories['upcoming'] = [task for task in all_tasks if task['days_left'] != None and task['days_left'] >= 0 and task['days_left'] <= 7 and task['status'] != 'Completed']
@@ -79,7 +80,7 @@ def update_db_with_tasks(tasks):
         t, freshly_created = Task.get_or_create(row_id=task["id"])
 
         freshly_completed = t.status != task['status'] and task['status'] == 'Completed'
-        new_idea = t.status != task['status'] and task['status'] == 'Ideas'
+        new_idea = t.status != task['status'] and task['status'] == 'Idea'
             
         q = Task.update(name=task['name'], status=task['status'], completion_date=task['completion_date'], freshly_created=freshly_created and not new_idea, freshly_completed=freshly_completed, new_idea=new_idea).where(Task.id == t.id)
         q.execute()
