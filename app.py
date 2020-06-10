@@ -28,7 +28,6 @@ def updateSlack():
     send_update_message(task_categories)
 
 
-updateSlack()
 @app.route('/new_task', methods = ['POST'])
 def new_task():
     open_new_task_modal(request.form['trigger_id'], request.form['response_url'])
