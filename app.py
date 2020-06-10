@@ -18,7 +18,7 @@ all_users = get_users_for_full_names(main_db_url, ['Aivant Goyal', 'Alison Dowsk
 # This `app` represents your existing Flask app
 app = Flask(__name__)
 
-@app.route('/update_slack')
+@app.route('/update_slack', methods = ['GET', 'POST'])
 def updateSlack():
     # update local task database using latest data from notion
     tasks = get_all_items(main_db_url)
@@ -27,6 +27,7 @@ def updateSlack():
     # Categorize all tasks and send update message
     task_categories = get_all_tasks_categorized()
     send_update_message(task_categories)
+    return ''
 
 
 @app.route('/new_task', methods = ['POST'])
