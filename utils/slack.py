@@ -24,6 +24,7 @@ def send_update_message(tasks):
 
     # Build Message Using Helper Functions
     message = '\n\n-----------------\n'.join([get_message_for_category(category, tasks[category]) for category in categories if tasks[category]])
+    message = "Hello! I'm your friendly E-Team Taskbot. Here's an update for what's been happening in Notion :robot_face: + message"
     send_message(channel_id, message)
 
 def open_new_task_modal(trigger_id, response_url):
