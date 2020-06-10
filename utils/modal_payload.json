@@ -130,22 +130,22 @@
           {
             "text": {
               "type": "plain_text",
-              "text": "Yes"
+              "text": "Actionable"
             },
-            "value": "yes"
+            "value": "no"
           },
           {
             "text": {
               "type": "plain_text",
-              "text": "No"
+              "text": "Idea"
             },
-            "value": "no"
+            "value": "yes"
           }
         ]
       },
       "label": {
         "type": "plain_text",
-        "text": "Is this an Idea? :bulb:",
+        "text": "Is this an Idea or an Actionable?",
         "emoji": true
       }
     }
