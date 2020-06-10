@@ -5,13 +5,13 @@ import urllib.parse as urlparse
 from utils.slack import get_slack_tag_for_name
 from pprint import pprint
 
-# if 'DATABASE_URL' in os.environ:
-#     import psycopg2
-#     urlparse.uses_netloc.append('postgres')
-#     url = urlparse.urlparse(os.environ["DATABASE_URL"])
-#     db = PostgresqlDatabase(database=url.path[1:], user=url.username, password=url.password, host=url.hostname, port=url.port)
-# else:
-db = SqliteDatabase('bot.db')
+if 'DATABASE_URL' in os.environ:
+    import psycopg2
+    urlparse.uses_netloc.append('postgres')
+    url = urlparse.urlparse(os.environ["DATABASE_URL"])
+    db = PostgresqlDatabase(database=url.path[1:], user=url.username, password=url.password, host=url.hostname, port=url.port)
+else:
+    db = SqliteDatabase('bot.db')
 
 class BaseModel(Model):
     class Meta:
@@ -58,6 +58,7 @@ def setup_db():
     db.create_tables([User, Task, UserTask])
 
 def get_all_tasks_categorized():
+    print("Getting all tasks")
     all_task_objects = Task.select()
     all_tasks = [t.to_dict() for t in all_task_objects]
     categories = {}
@@ -81,18 +82,20 @@ def update_db_with_tasks(tasks):
 
         freshly_completed = t.status != task['status'] and task['status'] == 'Completed'
         new_idea = t.status != task['status'] and task['status'] == 'Idea'
-            
+        print(f"Set up Task update Query for {task['name']}")
         q = Task.update(name=task['name'], status=task['status'], completion_date=task['completion_date'], freshly_created=freshly_created and not new_idea, freshly_completed=freshly_completed, new_idea=new_idea).where(Task.id == t.id)
         q.execute()
 
         for assignee in task['assignees']:
             # Create Assignee Record
             if assignee not in users:
+                print(f"Creating user record for {assignee}")
                 users[assignee], _ = User.get_or_create(name=assignee)
             user = users[assignee]
 
             # Create UserTask Join Table Record
-            try: 
+            try:
+                print("Creating User Task")
                 UserTask.create(user=user, task=t)
             except:
                 # If user task already exists, ignore
