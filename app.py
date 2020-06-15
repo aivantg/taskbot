@@ -9,7 +9,7 @@ import os
 
 setup_db()
 port = os.getenv("PORT") or 3000
-main_db_url = "https://www.notion.so/calblueprint/b2b9259d183b40728f0320d1f2650a2f?v=7328da4fadc74800b907b78291f0ddc4"
+main_db_url = "https://www.notion.so/calblueprint/9c16c13a742d48afb2441c5fe87adf2a?v=a0a24719edfc4504bb0b936f3b352dfe"
 latest_task_created, latest_task_updated = '', ''
 
 # cache db of all users so that we don't have to re-fetch each time
