@@ -13,8 +13,8 @@ SLACK_TOKEN = os.getenv('SLACK_AUTH_TOKEN')
 client = slack.WebClient(token=SLACK_TOKEN)
 BOT_ID = client.auth_test()['user_id']
 
-main_channel = 'eteam-secret-testing'
-update_channel = 'eteam-secret-testing'
+main_channel = 'eteam-tasks'
+update_channel = 'eteam-tasks'
 
 data = r.get("https://slack.com/api/conversations.list?types=private_channel&token=" + SLACK_TOKEN).json()
 channels = {c['name']: c['id'] for c in data['channels']}
