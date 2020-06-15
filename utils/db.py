@@ -74,17 +74,21 @@ def get_all_tasks_categorized():
     categories['horizon'] = [task for task in all_tasks if task['days_left'] != None and task['days_left'] >= 8 and task['days_left'] <=14 and task['status'] != 'Completed']
     return categories
 
+# Remove "New" modifiers
+def clean_db(tasks):
+    Task.update(freshly_created=False, freshly_completed=False, new_idea=False).where(True)
     
-def update_db_with_tasks(tasks):
+# Get latest tasks from Notion
+def refresh_db(tasks): 
     users = {}
     new_tasks = []
-
 
     for task in tasks:
         t, freshly_created = Task.get_or_create(row_id=task["id"])
 
-        freshly_completed = t.status != task['status'] and task['status'] == 'Completed'
-        new_idea = t.status != task['status'] and task['status'] == 'Idea'
+        freshly_created = freshly_created or task.freshly_created
+        freshly_completed = (t.status != task['status'] and task['status'] == 'Completed') or task.freshly_completed
+        new_idea = (t.status != task['status'] and task['status'] == 'Idea') or task.new_idea
         print(f"Set up Task update Query for {task['name']}")
         q = Task.update(name=task['name'], status=task['status'], completion_date=task['completion_date'], freshly_created=freshly_created and not new_idea, freshly_completed=freshly_completed, new_idea=new_idea).where(Task.id == t.id)
         q.execute()

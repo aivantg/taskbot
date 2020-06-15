@@ -22,11 +22,12 @@ app = Flask(__name__)
 def updateSlack():
     # update local task database using latest data from notion
     tasks = get_all_items(main_db_url)
-    db_tasks = update_db_with_tasks(tasks)
+    db_tasks = refresh_db(tasks)
 
     # Categorize all tasks and send update message
     task_categories = get_all_tasks_categorized()
     send_update_message(task_categories)
+    clean_db()
     return ''
 
 @app.route('/update_task', methods = ['POST'])
@@ -42,6 +43,10 @@ def new_task():
 
 @app.route('/list_options', methods=['POST'])
 def list_options():
+    # Make sure DB is up to date
+    tasks = get_all_items(main_db_url)
+    db_tasks = refresh_db(tasks)
+
     data = json.loads(request.form['payload'])
     action_id = data['action_id']
     query = data['value']
@@ -89,6 +94,7 @@ def modal_submit():
         if latest_task_updated == task_dict:
             print("Ignoring Duplicate")
             return '', 200
+            
         latest_task_updated = task_dict
         Task.update(name=name, assignees=assignees, completion_date=completion_date, status=status).where(Task.row_id == task_row_id)
         notion_url = update_notion_row(task_row_id, task_dict)
