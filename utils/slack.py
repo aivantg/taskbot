@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+from datetime import datetime
 from pprint import pprint
 import requests as r
 import os
@@ -24,7 +25,7 @@ def send_update_message(tasks):
 
     # Build Message Using Helper Functions
     message = '\n\n-----------------\n'.join([get_message_for_category(category, tasks[category]) for category in categories if tasks[category]])
-    message = "Hello! I'm your friendly E-Team Taskbot. Here's an update for what's been happening in Notion :robot_face:\n\n" + message
+    message = "Hi, I'm your friendly E-Team Taskbot. Happy " + datetime.today().strftime('%A') + "!\n\nHere's an update for what's been happening in Notion :robot_face:\n\n" + message
     send_message(channel_id, message)
 
 def open_new_task_modal(trigger_id, response_url):
