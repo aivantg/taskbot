@@ -33,7 +33,7 @@
           "type": "plain_text",
           "text": "Select a task"
         },
-        "min_query_length": 0
+        "min_query_length": 2
       }
     },
     {

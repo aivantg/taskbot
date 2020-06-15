@@ -95,13 +95,11 @@ def refresh_db(tasks):
         for assignee in task['assignees']:
             # Create Assignee Record
             if assignee not in users:
-                print(f"Creating user record for {assignee}")
                 users[assignee], _ = User.get_or_create(name=assignee)
             user = users[assignee]
 
             # Create UserTask Join Table Record
             try:
-                print("Creating User Task")
                 UserTask.create(user=user, task=t)
             except:
                 # If user task already exists, ignore
