@@ -28,11 +28,11 @@ status_emojis = {
     'Idea': ':bulb: '
 }
 category_message_templates = {
-    'freshly_completed': lambda tasks: create_category_message(':tada: Completed Tasks :tada:', basic_task_with_assignees, tasks),
-    'freshly_created': lambda tasks: create_category_message(':new: Newly Created :new: ', full_task, tasks),
-    'no_completion_date': lambda tasks: create_category_message(':question: Tasks w/o a Completion Date :question:', basic_task_with_assignees, tasks),
-    'new_idea': lambda tasks: create_category_message(':bulb: New Ideas :bulb:', basic_task_with_assignees, tasks),
-    'late': lambda tasks: create_category_message(':rotating_light: Overdue Tasks :rotating_light:', overdue_task, tasks),
-    'upcoming': lambda tasks: create_category_message(':calendar: Upcoming Tasks :calendar:', full_task, tasks),
-    'horizon': lambda tasks: create_category_message(':city_sunrise: Tasks on the Horizons :city_sunrise:', full_task, tasks)
+    'freshly_completed': lambda tasks: create_category_message(':tada: COMPLETED TASKS :tada:', basic_task_with_assignees, tasks),
+    'freshly_created': lambda tasks: create_category_message(':new: NEWLY CREATED :new: ', full_task, tasks),
+    'no_completion_date': lambda tasks: create_category_message(':question: TASKS W/O A COMPLETION DATE :question:', basic_task_with_assignees, tasks),
+    'new_idea': lambda tasks: create_category_message(':bulb: NEW IDEAS :bulb:', basic_task_with_assignees, tasks),
+    'late': lambda tasks: create_category_message(':rotating_light: OVERDUE TASKS :rotating_light:', overdue_task, tasks),
+    'upcoming': lambda tasks: create_category_message(':calendar: UPCOMING TASKS :calendar:', full_task, tasks),
+    'horizon': lambda tasks: create_category_message(':city_sunrise: TASKS ON THE HORIZON :city_sunrise:', full_task, tasks)
 }
