@@ -1,0 +1,190 @@
+{
+  "title": {
+    "type": "plain_text",
+    "text": "Update Task"
+  },
+  "submit": {
+    "type": "plain_text",
+    "text": "Update!"
+  },
+  "blocks": [
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "plain_text",
+          "text": "Only fill out fields that you want to change!",
+          "emoji": true
+        }
+      ]
+    },
+    {
+      "type": "input",
+      "block_id": "task",
+      "label": {
+        "type": "plain_text",
+        "text": "Choose a Task",
+        "emoji": true
+      },
+      "element": {
+        "action_id": "task_choose",
+        "type": "external_select",
+        "placeholder": {
+          "type": "plain_text",
+          "text": "Select a task"
+        },
+        "min_query_length": 0
+      }
+    },
+    {
+      "block_id": "completion_date",
+      "type": "input",
+      "optional": true,
+      "element": {
+        "action_id": "action",
+        "type": "datepicker",
+        "placeholder": {
+          "type": "plain_text",
+          "text": "Select a date",
+          "emoji": true
+        }
+      },
+      "label": {
+        "type": "plain_text",
+        "text": "Due Date",
+        "emoji": true
+      }
+    },
+    {
+      "block_id": "assignees",
+      "type": "input",
+      "optional": true,
+      "element": {
+        "action_id": "action",
+        "type": "multi_static_select",
+        "placeholder": {
+          "type": "plain_text",
+          "text": "Choose people to assign",
+          "emoji": true
+        },
+        "options": [
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Aivant Goyal",
+              "emoji": true
+            },
+            "value": "Aivant Goyal"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Alison Dowski",
+              "emoji": true
+            },
+            "value": "Alison Dowski"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Annie Wang",
+              "emoji": true
+            },
+            "value": "Annie Wang"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Ace Chen",
+              "emoji": true
+            },
+            "value": "Ace Chen"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Myles Domingo",
+              "emoji": true
+            },
+            "value": "Myles Domingo"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Micah Yong",
+              "emoji": true
+            },
+            "value": "Micah Yong"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Karina Nguyen",
+              "emoji": true
+            },
+            "value": "Karina Ngyuen"
+          }
+        ]
+      },
+      "label": {
+        "type": "plain_text",
+        "text": "Assignees",
+        "emoji": true
+      }
+    },
+    {
+      "block_id": "status",
+      "type": "input",
+      "optional": true,
+      "element": {
+        "action_id": "action",
+        "type": "static_select",
+        "placeholder": {
+          "type": "plain_text",
+          "text": "Status",
+          "emoji": true
+        },
+        "options": [
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Not Started",
+              "emoji": true
+            },
+            "value": "Not Started"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "In Progress",
+              "emoji": true
+            },
+            "value": "In Progress"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Completed",
+              "emoji": true
+            },
+            "value": "Completed"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Idea",
+              "emoji": true
+            },
+            "value": "Idea"
+          }
+        ]
+      },
+      "label": {
+        "type": "plain_text",
+        "text": "Status",
+        "emoji": true
+      }
+    }
+  ],
+  "type": "modal"
+}

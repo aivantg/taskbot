@@ -28,12 +28,31 @@ def send_update_message(tasks):
     send_message(channel_id, message)
 
 def open_new_task_modal(trigger_id, response_url):
-    with open('./utils/modal_payload.json') as f:
+    with open('./utils/new_task_modal.json') as f:
         payload = json.load(f)
     payload['private_metadata'] = response_url
     client.views_open(trigger_id=trigger_id, view=payload)
 
-def acknowledge_modal_submit(task, response_url, notion_url):
+def open_update_task_modal(trigger_id, response_url):
+    with open('./utils/update_task_modal.json') as f:
+        payload = json.load(f)
+    payload['private_metadata'] = response_url
+    client.views_open(trigger_id=trigger_id, view=payload)
+
+def handle_task_create():
+    pass
+
+def handle_task_update():
+    pass 
+
+def acknowledge_update_modal_submit(task, response_url, notion_url):
+    linked_page = f"<{notion_url}|{task['name']}>"
+    r.post(response_url, json={'text': f'Your task, "{linked_page}", has been created!', 'response_type': 'ephemeral'})
+    channel_id = channels[update_channel]
+    nl = "\n"
+    send_message(channel_id , f"*New {'Idea' if task['status'] == 'Idea' else 'Action Item'}*: {linked_page}{nl}*Assigned*: {', '.join([get_slack_tag_for_name(p.full_name) for p in task['assign']])}{nl}*Due*: {task['completion_date'].strftime('%a, %m/%d ')}")
+
+def acknowledge_create_modal_submit(task, response_url, notion_url):
     linked_page = f"<{notion_url}|{task['name']}>"
     r.post(response_url, json={'text': f'Your task, "{linked_page}", has been created!', 'response_type': 'ephemeral'})
     channel_id = channels[update_channel]

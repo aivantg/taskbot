@@ -57,10 +57,13 @@ def setup_db():
     db.connect()
     db.create_tables([User, Task, UserTask])
 
-def get_all_tasks_categorized():
+def get_all_tasks():
     print("Getting all tasks")
     all_task_objects = Task.select()
-    all_tasks = [t.to_dict() for t in all_task_objects]
+    return [t.to_dict() for t in all_task_objects]
+    
+def get_all_tasks_categorized():
+    all_tasks = get_all_tasks()
     categories = {}
     categories['freshly_completed'] = [task for task in all_tasks if task['freshly_completed']]
     categories['freshly_created'] = [task for task in all_tasks if task['freshly_created']]
