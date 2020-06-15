@@ -4,6 +4,7 @@ def get_message_for_category(category, tasks):
 
 
 
+
 nl = '\n'
 basic_task = lambda t: f"{status_emojis.get(t['status']) or ''}*{t['name']}*"
 basic_task_with_assignees = lambda t: f"{status_emojis.get(t['status']) or ''}*{t['name']}*, Assigned: {', '.join(t['assignees']) if t['assignees'] else '_No One_'}" 
