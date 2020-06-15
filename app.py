@@ -21,8 +21,6 @@ app = Flask(__name__)
 @app.route('/update_slack', methods = ['GET', 'POST'])
 def updateSlack():
     # update local task database using latest data from notion
-    pprint([t.to_dict() for t in Task.select()])
-    print("SEPARATOR")
     tasks = get_all_items(main_db_url)
     db_tasks = refresh_db(tasks)
 
@@ -30,7 +28,6 @@ def updateSlack():
     task_categories = get_all_tasks_categorized()
     send_update_message(task_categories)
     clean_db()
-    pprint([t.to_dict() for t in Task.select()])
 
     return ''
 
