@@ -36,11 +36,13 @@ def updateSlack():
 
 @app.route('/update_task', methods = ['POST'])
 def update_task():
+    print("Opened Update Task Modal")
     open_update_task_modal(request.form['trigger_id'], request.form['response_url'])
     return '' 
 
 @app.route('/new_task', methods = ['POST'])
 def new_task():
+    print("Opened New Task Modal")
     open_new_task_modal(request.form['trigger_id'], request.form['response_url'])
     return ''
 
