@@ -45,12 +45,17 @@ def handle_task_create():
 def handle_task_update():
     pass 
 
-def acknowledge_update_modal_submit(task, response_url, notion_url):
-    linked_page = f"<{notion_url}|{task['name']}>"
-    r.post(response_url, json={'text': f'Your task, "{linked_page}", has been created!', 'response_type': 'ephemeral'})
+def acknowledge_update_modal_submit(task, new_task, response_url, notion_url):
+    linked_page = f"<{notion_url}|{task.name}>"
+    r.post(response_url, json={'text': f'Your task, "{linked_page}", has been updated', 'response_type': 'ephemeral'})
     channel_id = channels[update_channel]
     nl = "\n"
-    send_message(channel_id , f"*New {'Idea' if task['status'] == 'Idea' else 'Action Item'}*: {linked_page}{nl}*Assigned*: {', '.join([get_slack_tag_for_name(p.full_name) for p in task['assign']])}{nl}*Due*: {task['completion_date'].strftime('%a, %m/%d ')}")
+    message = f"*Update to {'Idea' if task.status == 'Idea' else 'Action Item'}*: {linked_page}"
+    message += f"{nl}*New Name*: {new_task['name']}" if new_task['name'] != task.name else ''
+    message += f"{nl}*Status*: _{new_task['status']}_"
+    message += f"{nl}*Completion Date*: {new_task['completion_date'].strftime('%a, %m/%d ')}"
+    message += f"{nl}*Assigned*: {', '.join([get_slack_tag_for_name(p.full_name) for p in new_task['assign']])}"
+    send_message(channel_id , message)
 
 def acknowledge_create_modal_submit(task, response_url, notion_url):
     linked_page = f"<{notion_url}|{task['name']}>"

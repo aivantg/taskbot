@@ -47,6 +47,13 @@ def create_notion_row(databaseUrl, properties):
         setattr(row, key, value)
     return row.get_browseable_url()
 
+def update_notion_row(rowId, properties):
+    row = client.get_block(rowId)
+    for key, value in properties.items():
+        setattr(row, key, value)
+    return row.get_browseable_url()
+
+
 def delete_notion_row(rowId):
     client.get_block(rowId).remove()
 

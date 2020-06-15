@@ -60,37 +60,39 @@ def modal_submit():
     view_name = data['view']['title']['text']
     values = data['view']['state']['values']
     response_url = data['view']['private_metadata']
-
     if view_name == 'Update Task':
         task_row_id = values['task']['task_choose']['selected_option']['value']
         task = Task.select().where(Task.row_id == task_row_id)[0]
 
         # Get name if value exists
-        name_val = values['task_name']['action']
-        print("Name Value")
-        pprint(name_val)
-        
+        name_val = values['task_name']['task_name'].get('value')
+        name = name_val if name_val else task.name
 
         # Get assignees if value exists
         assignees_val = values['assignees']['action'].get('selected_options')
-        assign = [all_users[option['value']] for option in assignees_val] if assignees_val else [all_users[assignee.user.name] for assignee in task.assignees]
-        print("Assignees Value")
-        print(assignees_val)
-        print(assign)
+        assignees = [all_users[option['value']] for option in assignees_val] if assignees_val else [all_users[assignee.user.name] for assignee in task.assignees]
 
         # Get completion_date if exists
         completion_val = values['completion_date']['action'].get('selected_date')
         completion_date = datetime.strptime(completion_val, '%Y-%m-%d') if completion_val else task.completion_date
-        print("Completion Values")
-        print(completion_val)
-        print(completion_date)
 
         # Get status if exists
         status_val = values['status']['action'].get('selected_option')
         status = status_val['value'] if status_val else task.status
-        print("Status Value")
-        print(status_val)
-        print(status)
+
+        if not (status_val or completion_val or name_val or assignees_val):
+            print("No Updates Made")
+            return '', 200
+        print(f"Updating Task: {task.name}")
+        task_dict = {'name': name, 'assign': assignees, 'completion_date': completion_date, 'status': status}
+
+        if latest_task_updated == task_dict:
+            print("Ignoring Duplicate")
+            return '', 200
+        latest_task_updated = task_dict
+        Task.update(name=name, assignees=assignees, completion_date=completion_date, status=status).where(Task.row_id == task_row_id)
+        notion_url = update_notion_row(task_row_id, task_dict)
+        acknowledge_update_modal_submit(task, task_dict, response_url, notion_url)
         return '', 200
     elif view_name == 'Create Task':
         # Create new Notion Row
