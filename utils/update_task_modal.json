@@ -37,6 +37,25 @@
       }
     },
     {
+      "block_id": "task_name",
+      "type": "input",
+      "optional": true,
+      "element": {
+        "action_id": "task_name",
+        "type": "plain_text_input",
+        "placeholder": {
+          "type": "plain_text",
+          "text": "New name for task",
+          "emoji": true
+        }
+      },
+      "label": {
+        "type": "plain_text",
+        "text": "Task Name",
+        "emoji": true
+      }
+    },
+    {
       "block_id": "completion_date",
       "type": "input",
       "optional": true,

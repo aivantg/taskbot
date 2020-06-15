@@ -65,10 +65,16 @@ def modal_submit():
         task_row_id = values['task']['task_choose']['selected_option']['value']
         task = Task.select().where(Task.row_id == task_row_id)[0]
 
+        # Get name if value exists
+        name_val = values['task_name']['action']
+        print("Name Value")
+        pprint(name_val)
+        
+
         # Get assignees if value exists
         assignees_val = values['assignees']['action'].get('selected_options')
-        print("Assignees Value")
         assign = [all_users[option['value']] for option in assignees_val] if assignees_val else [all_users[assignee.user.name] for assignee in task.assignees]
+        print("Assignees Value")
         print(assignees_val)
         print(assign)
 
